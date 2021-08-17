@@ -1,0 +1,218 @@
+from random import randint
+
+descuento = randint(80,95)
+
+diccliente = {}
+mailcliente = {}
+
+
+#Bienvenida
+print("\n-----Bienvenido a la FRUTEC-----\n")
+print("Si aún no está registrado lo invitamos a hacerlo para obtener un descuento aleatorio en su total.")
+
+# Registro de ciente
+def registrarcliente():
+    global diccliente
+    global mailcliente
+    print()
+    print("Registrar Cliente")
+    print()
+
+    #Validación id
+    def contar_digitos(cadena):
+        digitos = 0
+        
+        for c in cadena:
+            
+            if c.isdigit():
+                digitos += 1
+                
+            else:
+                pass
+            
+        return digitos
+    
+    idcliente = input("Ingrese los tres números que conformarán su id: ")
+    cantidadigitos = contar_digitos(idcliente)
+    if cantidadigitos != 3:
+        print()
+        print("Id de cliente no válido, ingrese un id de tres dígitos")
+
+    elif idcliente in diccliente:
+        print()
+        print("El id ingresado ya existe, favor de seleccionar uno nuevo")
+        
+    else:
+        name = input("Ingrese su nombre: ")
+        mail = input("Ingrese su dirección de correo electrónico: ")
+        diccliente[idcliente] = name
+        mailcliente[idcliente] = mail
+        print()
+        print("¡Gracias por registrarse!")
+
+        
+# Id del usuario
+def buscarcliente():
+    print()
+    print("Buscar Cliente")
+    print()
+    idc = input("Ingrese el id del cliente: ")
+
+    if diccliente.get(idc, 0) == 0:
+        print("Cliente no registrado")
+
+    else:
+        print()
+        print(idc,"--->", diccliente[idc],"--->", mailcliente[idc]) 
+        
+
+def opciones():
+    print()
+    msg = "Plataforma de Registro"
+    print (msg)
+    print("-" * len(msg))
+    print()
+    print("Opciones:")
+    print()
+    
+    opcmen = {1: "Proceder con la compra", 2: "Proceder con registro", 3: "Verificar estatus de registro"}
+    
+    for op, opm in opcmen.items():
+        print("{}, {}".format(op,opm))
+
+def menu():
+    op = 0
+
+    while op != 1:
+        
+        opciones()
+        print()
+        
+        op = int(input("Indique la opción deseada [1...3]: "))
+        
+        if op in range (0,4):
+            
+            if op == 2:
+                registrarcliente()
+
+            elif op == 3:
+                buscarcliente()
+
+            else:
+                print()
+                
+        else:
+            print()
+            print("Opción no válida")
+menu()
+
+
+print("Productos disponibles:")
+print("1. Plátanos")
+print("2. Manzanas")
+print("3. Naranjas")
+print("4. Sandías")
+print("5. Uvas")
+print("0. Proceder al checkout")
+
+
+total = 0
+global cart
+cart = {}
+
+
+
+def carrito():
+
+    option = 10
+    cuenta = 0
+    global total
+    price1 = 0
+    price2 = 0
+    price3 = 0
+    price4 = 0
+    price5 = 0
+
+    while option != 0:
+        option = int(input("Ingrese el número correspondiente al producto que desea llevar: "))
+        
+        if option in range (6):
+            
+            if option == 0:
+                break
+
+            elif option == 1:
+                kg = float(input("¿Cúantos kg de plátanos llevará?: "))
+                if price1 == 0:
+                    price1 = float(input("¿Cuál es el precio por kg?: "))
+                    cuenta += kg*price1
+                else:
+                    cuenta += kg*price1
+                    
+            elif option == 2:
+                kg = float(input("¿Cúantos kg de mazanas llevará?: "))
+                if price2 == 0:
+                    price2 = float(input("¿Cuál es el precio por kg?: "))
+                    cuenta += kg*price2
+                else:
+                    cuenta += kg*price2
+
+            elif option == 3:
+                kg = float(input("¿Cúantos kg de naranjas llevará?: "))
+                if price3 == 0:
+                    price3 = float(input("¿Cuál es el precio por kg?: "))
+                    cuenta += kg*price3
+                else:
+                    cuenta += kg*price3
+
+            elif option == 4:
+                kg = float(input("¿Cúantos kg de sandías llevará?: "))
+                if price4 == 0:
+                    price4 = float(input("¿Cuál es el precio por kg?: "))
+                    cuenta += kg*price4
+                else:
+                    cuenta += kg*price4
+
+            elif option == 5:
+                kg = float(input("¿Cúantos kg de uvas llevará?: "))
+                if price5 == 0:
+                    price5 = float(input("¿Cuál es el precio por kg?: "))
+                    cuenta += kg*price5
+                else:
+                    cuenta += kg*price5
+        else:
+            print("La clave del producto no es válida\n")
+
+        total = cuenta
+
+carrito()
+
+def final():
+    s_n = input("\n¿Es usted cliente registrado? \nResponda S para sí o N para no: ")
+
+    if s_n == "S" or s_n == "s":
+        idc = input("Ingrese su id de cliente para obtener un descuento: ")
+
+        if diccliente.get(idc, 0) == 0:
+        
+            print("Id de cliente no encontrado")
+            print("Su total es de ${}".format(total))
+            print("Gracias por su compra")
+
+        else:
+            # Calcular el total de la cuenta si está registrado
+            totalc = total * (descuento/100)
+            desc = 100 - descuento
+            print("Total previo al descuento: ${}".format(total))
+            print("Total con descuento ${}".format(totalc))
+            print("Descuento aplicado del {}%".format(desc))
+            print("Gracias por tu compra {}".format(diccliente[idc]))
+
+    elif s_n == "N" or s_n == "n":
+        print("Su total es de ${}".format(total))
+        print("Gracias por su compra")
+
+    else:
+        final()
+    
+final()
