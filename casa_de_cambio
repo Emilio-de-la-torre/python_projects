@@ -1,0 +1,61 @@
+"""
+Ejercicio Cambio de divisas
+
+Datos de Entrada:
+   Monto a cambiar
+   Divisa de entrada
+   Divisda de salida
+
+Proceso:
+   Solicitar divisa base
+   Solicitar divisa deseada
+   Obtener tasa de cambio
+   Solicitar monto a cambiar
+   Sacar total multiplicando monto por la tasa de cambio
+
+Salida:
+   Imprimir monto obtenido en el cambio y detalles de este
+"""
+
+import requests
+base = None
+rate = 0
+other = None
+
+def main():
+	base_n = input("Selecciona tu divisa (formato: MXN, USD, EUR, etc...): ")
+	global base
+	base = base_n.upper()
+	other_n = input("Selecciona la divisa deseada: ")
+	global other
+	other = other_n.upper()
+	access_key = "2b57f34bdc477e0dc4f93cb262922d64"
+	res_b = requests.get("http://data.fixer.io/api/latest",
+						params={"access_key": access_key, "base": "EUR", "symbols": base})
+	res_o = requests.get("http://data.fixer.io/api/latest",
+						params={"access_key": access_key, "base": "EUR", "symbols": other})
+	if res_b.status_code != 200 or res_o.status_code != 200:
+		raise Exception("ERROR: API request unsuccessful.")
+	data_b = res_b.json()
+	data_o = res_o.json()
+	rate_b = data_b["rates"][base]
+	rate_o = data_o["rates"][other]
+	global rate
+	rate = round((rate_o / rate_b), 2)
+ 
+if __name__ == "__main__":
+	main()
+ 
+def main():
+	res = requests.get("http://data.fixer.io/api/latest?access_key=2b57f34bdc477e0dc4f93cb262922d64")
+	if res.status_code != 200:
+		raise Exception("ERROR: API request unsuccessful.")
+	data = res.json()
+ 
+if __name__ == "__main__":
+	main()
+
+amount = float(input("Ingresa el monto a cambiar: "))
+total = round((amount * rate),2)
+print(f"Tu total es de {total}{other}, con una tasa de cambio de {rate}{other} por cada {base}")
+               
